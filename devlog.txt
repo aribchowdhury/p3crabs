@@ -11,3 +11,7 @@ Made the basic file structure for the project
 
 aribC -- 2021-04-22 21:23
 Added Design Doc
+Updated ReadMe.md, still incomplete
+
+carlosH -- 2021-04-23 9:59
+Added basic Flask App with user auth
