@@ -1,0 +1,4 @@
+- Included the api you are going to use, very good!
+- Component map and site map look very indepth!
+- Has a timeline that seems realistic and gets a lot done
+- Stacked up on components but looks like it will be a cool finished product
