@@ -8,3 +8,6 @@ Each entry should begin with the following format: firstL -- TIMESTAMP\n ( e.g.:
 
 carlosH -- 2021-04-21 15:25
 Made the basic file structure for the project
+
+aribC -- 2021-04-22 21:23
+Added Design Doc
