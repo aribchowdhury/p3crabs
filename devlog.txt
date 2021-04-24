@@ -21,3 +21,6 @@ Added initial file containing PlayerCPU class with the player vs cpu simulation
 
 carlosH -- 2021-04-24 01:35
 Added a route showing socket functionality
+
+saqifA -- 2021-04-24 19:16
+Fixed file name typo and removed unnecessary packages from requirements.txt
