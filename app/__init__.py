@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, session, redirect
+from flask_socketio import SocketIO, emit
 from requests import get
 from .db_manager import *
 import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)  # random 32 bit key
+socketio = SocketIO(app)
 createTables()
 
 
@@ -53,9 +55,17 @@ def registerRedirect():
     return redirect("/")  # dpdt on home.html
 
 
+annoucment = {"text": "Hello"}
+
+
+@socketio.on('Label value changed')
+def value_changed(message):
+    annoucment[message['who']] = message['data']
+    emit('update value', message, broadcast=True)
+
 @app.route("/home")
 def home():
-    return "you are home"
+    return render_template("test.html", **annoucment)
 
 
 # logout func
@@ -77,4 +87,4 @@ def test():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
