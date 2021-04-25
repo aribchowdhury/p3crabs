@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Synchronized Slider</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        // sending a connect request to the server.
+        let socket = io.connect("http://127.0.0.1:5000/");
+
+        // An event handler for a change of value
+        // for some reason arrow functions don't work here
+        $("input.sync").on("input", function (event) {
+          socket.emit("Label value changed", {
+            who: $(this).attr("id"),
+            data: $(this).val(),
+          });
+          return false;
+        });
+
+        socket.on("update value", (msg) => {
+          $("#change").text(msg.data);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <input type="text" name="testing" id="text" class="sync">
+    <br>
+    <label for="testing" id="change">{{text}}</label>
+  </body>
+</html>
