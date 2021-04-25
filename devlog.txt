@@ -24,3 +24,8 @@ Added a route showing socket functionality
 
 saqifA -- 2021-04-24 19:16
 Fixed file name typo and removed unnecessary packages from requirements.txt
+
+aribC -- 2021-04-25 15:01
+Made PlayerCPU class easier to test by just running file
+'categories' parameter for class where you can select what categories of questions you want to be generated
+Defaulted to 1 random category
