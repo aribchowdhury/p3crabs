@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, session, redirect
 from flask_socketio import SocketIO, emit
 from requests import get
 from .db_manager import *
-import os
+from os import urandom
 
 app = Flask(__name__)
-app.secret_key = os.urandom(32)  # random 32 bit key
+app.secret_key = urandom(32)  # random 32 bit key
 socketio = SocketIO(app)
 createTables()
 
@@ -58,10 +58,11 @@ def registerRedirect():
 annoucment = {"text": "Hello"}
 
 
-@socketio.on('Label value changed')
+@socketio.on("Label value changed")
 def value_changed(message):
-    annoucment[message['who']] = message['data']
-    emit('update value', message, broadcast=True)
+    annoucment[message["who"]] = message["data"]
+    emit("update value", message, broadcast=True)
+
 
 @app.route("/home")
 def home():
