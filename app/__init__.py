@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = urandom(32)  # random 32 bit key
 socketio = SocketIO(app)
 game = None
-# createTables()
+createTables()
 
 
 @app.route("/")
@@ -42,11 +42,12 @@ def checkAnswer():
     global game
     game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
     playerSprite, bossSprite = game.getSprites()
+    game.newQuestion()
     return render_template(
         "cpu.html",
         playerSprite=playerSprite,
         bossSprite=bossSprite,
-        trivia=game.trivia[1:],
+        trivia=game.trivia[-1],
         health=game.healthCheck(),
     )
 
