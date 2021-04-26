@@ -1,13 +1,17 @@
+# Team Crabs: Karl Hernandez, Arib Chowdhury, Anya Zorin, Saqif Abedin
+# Softdev
+# P3: ArRESTed Development, JuSt in Time
+# 2021-04-23
 import sqlite3
+
 # for testing only
 # import os
 # os.remove("../blogdata.db")
 
-DB_FILE = "./app/blogdata.db"
+DB_FILE = "./app/leaderboard.db"
 
 db = sqlite3.connect(DB_FILE, check_same_thread=False)
 c = db.cursor()
-
 
 # creates the tables
 def createTables():
@@ -29,8 +33,7 @@ def createTables():
 # consider case when 2 users have the same username and password. Technically
 # would work because they have different ids. Should we make username unique as well?
 def getUserId(username: str) -> int:
-    command = 'SELECT id FROM users WHERE username = "{}";'.format(
-        username)
+    command = 'SELECT id FROM users WHERE username = "{}";'.format(username)
     info = 0
     for row in c.execute(command):
         info = row[0]
@@ -49,7 +52,7 @@ def getUsername(user_id: int) -> str:
 
 # returns a list of all the user_ids in the db
 def getAllUsers():
-    command = 'SELECT id FROM users'
+    command = "SELECT id FROM users"
     ids = []
     for row in c.execute(command):
         ids.append(row[0])
@@ -60,13 +63,15 @@ def getAllUsers():
 # if argument username is not present in the database
 def getUserInfo(username: str):
     command = 'SELECT username, password, id FROM users WHERE username = "{}";'.format(
-        username)
+        username
+    )
     info = ()
     for row in c.execute(command):
         info += (row[0], row[1], row[2])
     if info == ():
         return None
     return info
+
 
 # returns a tuple in the following format: (login_successful, issue, user_id)
 # login_successful will be either True (correct info) or False
@@ -85,18 +90,15 @@ def checkLogin(username: str, password: str) -> tuple:
 # registers a new user by adding their info to the db
 # returns the unique user_id so that it can be added to the session in app.py
 def registerUser(username: str, password: str):
-    command = 'INSERT INTO users VALUES ("{}", "{}", NULL);'.format(
-        username, password)
+    command = 'INSERT INTO users VALUES ("{}", "{}", NULL);'.format(username, password)
 
     c.execute(command)
     db.commit()
 
+
 # closes the database (only use if user logging out i think)
 def close():
     db.close()
-
-
-# Helper functions (DO NOT USE IN app.py):
 
 
 # For testing only

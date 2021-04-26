@@ -1,3 +1,7 @@
+# Team Crabs: Karl Hernandez, Arib Chowdhury, Anya Zorin, Saqif Abedin
+# Softdev
+# P3: ArRESTed Development, JuSt in Time
+# 2021-04-23
 from flask import Flask, render_template, request, session, redirect
 from flask_socketio import SocketIO, emit
 from requests import get
