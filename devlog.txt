@@ -34,9 +34,10 @@ carlosH -- 04-26-2021 0:00
 Pushed intial stuff for Marvel API usage
 Created pvp.py for player vs player simulation
 
-aribC -- 04-26-2021
+aribC -- 2021-04-26 18:51
 Added initial flask code for player vs cpu simulation
 Set trivia DB question type to multiple choice
 
-carlosH -- 04-26-2021
+carlosH -- 2021-04-26 18:51
 Combined the website to be runnable 
+And fixed character encoding on trivia

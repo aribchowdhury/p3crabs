@@ -32,7 +32,7 @@ def cpu():
         "cpu.html",
         playerSprite=playerSprite,
         bossSprite=bossSprite,
-        trivia=game.trivia,
+        trivia=game.trivia[0],
         health=game.healthCheck(),
     )
 

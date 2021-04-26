@@ -4,6 +4,7 @@
 # 2021-04-23
 from requests import get
 from random import randint, shuffle
+from html import unescape
 
 
 class PlayerCPU:
@@ -52,8 +53,9 @@ class PlayerCPU:
                 rawTrivia = get("https://opentdb.com/api.php?amount="+str(questionsPerCategory)+"&category="+str(category)+"&type=multiple").json()
                 for question in rawTrivia["results"]:
                     trivia.append(
-                        [question["question"].strip(), question["correct_answer"].strip().upper(), 
-                        [choice.strip().upper() for choice in question["incorrect_answers"]]]
+                        [unescape(question["question"].strip()),
+                            unescape(question["correct_answer"].strip()),
+                        [unescape(choice.strip()) for choice in question["incorrect_answers"]]]
                     )
         return trivia
 
@@ -70,7 +72,7 @@ class PlayerCPU:
     def checkAnswer(
         self, yourAnswer
     ):  # Check answer to see if it is correct then apply damage accordingly
-        if yourAnswer.strip().upper() == self.answer:
+        if yourAnswer.strip() == self.answer:
             print("You have gotten the answer correct!")
             self.damageResult(self.boss)
         else:
