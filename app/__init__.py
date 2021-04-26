@@ -5,15 +5,15 @@
 from flask import Flask, render_template, request, session, redirect
 from flask_socketio import SocketIO, emit
 from requests import get
-#from .db_manager import *
-from player_cpu import PlayerCPU
+from .db_manager import *
+from .player_cpu import PlayerCPU
 from os import urandom
 
 app = Flask(__name__)
 app.secret_key = urandom(32)  # random 32 bit key
 socketio = SocketIO(app)
 game = None
-#createTables()
+# createTables()
 
 
 @app.route("/")
@@ -22,18 +22,33 @@ def index():
         return redirect("/home")  # dpdt on home.html
     return render_template("login.html")  # dpdt on login.html
 
+
 @app.route("/cpu")
 def cpu():
     global game
     game = PlayerCPU()
     playerSprite, bossSprite = game.getSprites()
-    return render_template("cpu.html",playerSprite = playerSprite, bossSprite = bossSprite, trivia=game.trivia, health=game.healthCheck())
+    return render_template(
+        "cpu.html",
+        playerSprite=playerSprite,
+        bossSprite=bossSprite,
+        trivia=game.trivia,
+        health=game.healthCheck(),
+    )
+
 
 @app.route("/checkAnswer")
 def checkAnswer():
     global game
-    game.checkAnswer(game.choices[request.form["answer"]]) #1-4
-    return render_template("cpu.html",playerSprite = playerSprite, bossSprite = bossSprite, trivia=game.trivia[1:], health=game.healthCheck())
+    game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
+    return render_template(
+        "cpu.html",
+        playerSprite=playerSprite,
+        bossSprite=bossSprite,
+        trivia=game.trivia[1:],
+        health=game.healthCheck(),
+    )
+
 
 @app.route("/loginRead", methods=["POST"])  # takes info from the login form
 def login():

@@ -4,16 +4,17 @@
 # 2021-04-23
 from requests import get
 from random import randint, shuffle
+from .marvel import getChars
 
 
 class PlayerVsPlayer:
     # level corresponds to the number of questions overall
     # categories will be the categories of trivia questions
-    def __init__(self, level=10, categories=["random"]):  # Start up simulation
+    def __init__(self, level=10):  # Start up simulation
         self.level = level
         self.player, self.opponent = self.generateEntities(level)
-        self.trivia = self.generateTrivia(2 * level, categories)
-        self.question = None
+        self.trivia = self.generateTrivia(level)
+        self.img = None
         self.answer = None
         self.choices = None
 
@@ -32,23 +33,27 @@ class PlayerVsPlayer:
         return player, opponent
 
     def generateTrivia(self, questions):
-        #
-
+        trivia = getChars()
+        return trivia[:questions]
 
     def newQuestion(self):  ##Need a way of fixing unicode characters
-        question, answer, choices = self.trivia.pop()
-        self.question = question
-        self.answer = answer
-        self.choices = choices + [answer]
-        shuffle(self.choices)
-        print(
-            "Question Successfully Generated!\n",
-            question,
-            "\nThe correct answer is",
-            answer,
-        )
-        print("Possible Choices:", str(self.choices))
-        return question, answer, self.choices
+        questionTuple = self.trivia.pop()
+        self.answer = questionTuple[0]
+        self.img = questionTuple[1]
+        wordLength = len(self.answer)
+
+        # self.question = question
+        # self.answer = answer
+        # self.choices = choices + [answer]
+        # shuffle(self.choices)
+        # print(
+        #     "Question Successfully Generated!\n",
+        #     question,
+        #     "\nThe correct answer is",
+        #     answer,
+        # )
+        # print("Possible Choices:", str(self.choices))
+        # return question, answer, self.choices
 
     def checkAnswer(
         self, yourAnswer
@@ -103,6 +108,6 @@ class PlayerVsPlayer:
 
 
 if __name__ == "__main__":
-    x = PlayerCPU()
+    x = PlayerVsPlayer()
     while True:
         x.testTerminal()

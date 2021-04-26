@@ -1,10 +1,12 @@
-from random import randint, shuffle
-import requests
 import hashlib
+from random import randint, shuffle
 import time
 
+import requests
 
-def getChars():
+
+# character name, and their img
+def getChars() -> list:
     with open("./app/keys/key_api0.txt", "r") as keys:
         f = keys.readlines()
         public = f[0].strip()
@@ -25,16 +27,18 @@ def getChars():
     useful = []
 
     for i in body:
-        img = i["thumbnail"]
-        if "not" not in img["path"] and img["extension"] != "gif":
-            url = img["path"] + "." + img["extension"]
+        path = i["thumbnail"]["path"]
+        extension = i["thumbnail"]["extension"]
+        if "not" not in path and extension != "gif":
+            url = path + "." + extension
             useful.append((i["name"], url))
 
     shuffle(useful)
-    return useful[:10]
+    return useful
 
 
-print(getChars())
+if __name__ == "__main__":
+    print(getChars())
 # print(useful[:10])
 # print(len(useful))
 # characters = body['name']
