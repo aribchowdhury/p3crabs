@@ -29,3 +29,10 @@ aribC -- 2021-04-25 15:01
 Made PlayerCPU class easier to test by just running file
 'categories' parameter for class where you can select what categories of questions you want to be generated
 Defaulted to 1 random category
+
+carlosH -- 04-26-2021 0:00
+Pushed intial stuff for Marvel API usage
+Created pvp.py for player vs player simulation
+
+aribC -- 04-26-2021
+Added initial flask code for player vs cpu simulation
