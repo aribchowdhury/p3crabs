@@ -30,6 +30,7 @@ class PlayerCPU:
         print(bossSprite)
         return player, boss
 
+
     def generateTrivia(
         self, questions, categories
     ):  ##Need better ways of generating triva, possibly give MC or specific categoried trivia
@@ -52,22 +53,22 @@ class PlayerCPU:
             if 9 <= category <= 32:
                 rawTrivia = get("https://opentdb.com/api.php?amount="+str(questionsPerCategory)+"&category="+str(category)+"&type=multiple").json()
                 for question in rawTrivia["results"]:
-                    trivia.append(
-                        [unescape(question["question"].strip()),
-                            unescape(question["correct_answer"].strip()),
-                        [unescape(choice.strip()) for choice in question["incorrect_answers"]]]
-                    )
+                    tmp = [unescape(question["correct_answer"].strip())] + [unescape(choice.strip()) for choice in question["incorrect_answers"]]
+                    shuffle(tmp)
+                    trivia.append([unescape(question["question"].strip()), unescape(question["correct_answer"].strip()), tmp])
         return trivia
+
 
     def newQuestion(self):  ##Need a way of fixing unicode characters
         question, answer, choices = self.trivia.pop()
         self.question = question
         self.answer = answer
-        self.choices = choices + [answer]
+        self.choices = choices
         shuffle(self.choices)
         print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
         print("Possible Choices:", str(self.choices))
         return question, answer, self.choices
+
 
     def checkAnswer(
         self, yourAnswer
@@ -78,6 +79,7 @@ class PlayerCPU:
         else:
             print("You have gotten the answer incorrect")
             self.damageResult(self.player)
+
 
     def damageResult(self, damageTo):  # Apply damage to player/boss
         if damageTo == self.player:
@@ -101,11 +103,14 @@ class PlayerCPU:
                 self.boss["health"] = 0
                 print("Boss has died")
 
+
     def healthCheck(self):  # Check health of player and boss
         return self.player["health"], self.boss["health"]
 
+
     def getSprites(self): # Get player sprite and boss sprite
         return self.player["sprite"], self.boss["sprite"]
+
 
     def testTerminal(self):  # Here only for testing purposes
         self.newQuestion()
