@@ -127,4 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-./app/keys/key_api0.txt
+app/keys/*
