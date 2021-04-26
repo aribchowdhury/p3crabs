@@ -36,6 +36,7 @@ Created pvp.py for player vs player simulation
 
 aribC -- 04-26-2021
 Added initial flask code for player vs cpu simulation
+Set trivia DB question type to multiple choice
 
 carlosH -- 04-26-2021
 Combined the website to be runnable 

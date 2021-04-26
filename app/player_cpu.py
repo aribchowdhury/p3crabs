@@ -34,40 +34,10 @@ class PlayerCPU:
     ):  ##Need better ways of generating triva, possibly give MC or specific categoried trivia
         questionsPerCategory = questions // len(categories) + 1
         openTriviaCategories = [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            "general_knowledge",
-            "books",
-            "film",
-            "music",
-            "musicals",
-            "television",
-            "videogames",
-            "boardgames",
-            "science_nature",
-            "science_computers",
-            "science_mathematics",
-            "mythology",
-            "sports",
-            "geography",
-            "history",
-            "politics",
-            "art",
-            "celebrities",
-            "animals",
-            "vehicles",
-            "comics",
-            "science_gadgets",
-            "anime_manga",
-            "cartoon_animations",
-        ]
+            0,1,2,3,4,5,6,7,8,"general_knowledge","books","film","music","musicals","television","videogames","boardgames","science_nature",
+            "science_computers","science_mathematics","mythology","sports","geography","history","politics","art","celebrities","animals",
+            "vehicles","comics","science_gadgets","anime_manga","cartoon_animations",
+            ]
         trivia = []
         for category in categories:
             # Handles trivia categories from openTriviaDB as integers from 9 to 32
@@ -79,22 +49,11 @@ class PlayerCPU:
                 "Questions for category", openTriviaCategories[category], "generated!"
             )
             if 9 <= category <= 32:
-                rawTrivia = get(
-                    "https://opentdb.com/api.php?amount="
-                    + str(questionsPerCategory)
-                    + "&category="
-                    + str(category)
-                ).json()
+                rawTrivia = get("https://opentdb.com/api.php?amount="+str(questionsPerCategory)+"&category="+str(category)+"&type=multiple").json()
                 for question in rawTrivia["results"]:
                     trivia.append(
-                        [
-                            question["question"].strip(),
-                            question["correct_answer"].strip().upper(),
-                            [
-                                choice.strip().upper()
-                                for choice in question["incorrect_answers"]
-                            ],
-                        ]
+                        [question["question"].strip(), question["correct_answer"].strip().upper(), 
+                        [choice.strip().upper() for choice in question["incorrect_answers"]]]
                     )
         return trivia
 
@@ -104,12 +63,7 @@ class PlayerCPU:
         self.answer = answer
         self.choices = choices + [answer]
         shuffle(self.choices)
-        print(
-            "Question Successfully Generated!\n",
-            question,
-            "\nThe correct answer is",
-            answer,
-        )
+        print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
         print("Possible Choices:", str(self.choices))
         return question, answer, self.choices
 
@@ -129,13 +83,7 @@ class PlayerCPU:
             if attLeft != 1:
                 damage = randint(900, 1100) / (self.bossLevel // 2)
                 self.player["health"] -= damage
-                print(
-                    "Player has taken",
-                    damage,
-                    "damage and has",
-                    self.player["health"],
-                    "health remaining",
-                )
+                print("Player has taken",damage,"damage and has",self.player["health"],"health remaining")
             else:
                 print("Player has taken", self.player["health"], "damage")
                 self.player["health"] = 0
@@ -145,13 +93,7 @@ class PlayerCPU:
             if attLeft != 1:
                 damage = randint(900, 1100) / self.bossLevel
                 self.boss["health"] -= damage
-                print(
-                    "Boss has taken",
-                    damage,
-                    "damage and has",
-                    self.boss["health"],
-                    "health remaining",
-                )
+                print("Boss has taken", damage,"damage and has",self.boss["health"],"health remaining")
             else:
                 print("Boss has taken", self.boss["health"], "damage")
                 self.boss["health"] = 0

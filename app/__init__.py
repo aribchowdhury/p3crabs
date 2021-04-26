@@ -41,6 +41,7 @@ def cpu():
 def checkAnswer():
     global game
     game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
+    playerSprite, bossSprite = game.getSprites()
     return render_template(
         "cpu.html",
         playerSprite=playerSprite,
