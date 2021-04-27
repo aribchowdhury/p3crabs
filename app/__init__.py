@@ -29,7 +29,7 @@ def login():
 
     # we will pass issue as an argument
     # vague error
-    return render_template("error.html", error=issue)  # dpdt on error.html
+    return render_template("login.html", err="is-invalid", errmsg=issue)  # dpdt on error.html
 
 
 # register func
@@ -47,7 +47,7 @@ def registerRedirect():
     for _id in getAllUsers():
         users.append(getUsername(_id))
     if tempUser in users:
-        return render_template("error.html", error="Username already exists")
+        return render_template("register.html", err="is-invalid", errmsg="Username already exists")
     tempPass = request.form["password"]
     registerUser(tempUser, tempPass)
     return redirect("/")  # dpdt on home.html

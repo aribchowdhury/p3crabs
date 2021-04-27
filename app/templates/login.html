@@ -18,13 +18,13 @@
       <h3>Login</h3>
       <form action="/loginRead" method="POST">
         <div class="form-group">
-          <input type="text" name="username" class="form-control" placeholder="Enter Username" style="width: 30%; margin: auto;"/>
+          <input type="text" name="username" class="form-control {{ err }}" placeholder="Enter Username" style="width: 30%; margin: auto;"/>
         </div>
         <div class="form-group">
           <label for="password" class="sr-only">Password: </label>
-          <input type="password" name="password" class="form-control is-invalid" placeholder="Password" style="width: 30%; margin: auto;">
+          <input type="password" name="password" class="form-control {{ err }}" placeholder="Password" style="width: 30%; margin: auto;">
           <div class="invalid-feedback">
-              Incorrect password
+              {{errmsg}}
           </div>
         </div>  
         <button type="submit" class="btn btn-primary">Submit</button>
