@@ -32,7 +32,8 @@ def cpu():
         "cpu.html",
         playerSprite=playerSprite,
         bossSprite=bossSprite,
-        trivia=game.trivia[0],
+        question=game.trivia[-1][0],
+        choices=game.trivia[-1][2],
         health=game.healthCheck(),
     )
 
@@ -47,7 +48,8 @@ def checkAnswer():
         "cpu.html",
         playerSprite=playerSprite,
         bossSprite=bossSprite,
-        trivia=game.trivia[-1],
+        question=game.trivia[-1][0],
+        choices=game.trivia[-1][2],
         health=game.healthCheck(),
     )
 
