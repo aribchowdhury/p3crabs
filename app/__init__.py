@@ -55,7 +55,7 @@ def registerRedirect():
 
 @app.route("/home")
 def home():
-    return "you are home"
+    return render_template("home.html")
 
 
 # logout func
