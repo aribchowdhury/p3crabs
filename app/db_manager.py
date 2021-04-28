@@ -21,10 +21,12 @@ def createTables():
     # username (str)
     # password (str)
     # unique id (int primary key)
+
     command = "CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);"
+    command += "CREATE TABLE IF NOT EXISTS leaderboard(username TEXT, correct INT, incorrect INT, score INT);"
 
     # executes the command and commits the change
-    c.execute(command)
+    c.executescript(command)
     db.commit()
 
 
