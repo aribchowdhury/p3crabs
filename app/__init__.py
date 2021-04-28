@@ -163,7 +163,10 @@ def pvp_check_answer():
 #     return render_template("test.html", **annoucment)
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    board = top5()
+    return render_template("home.html", user1=board[0][0], score1=board[0][1], user2=board[1][0], 
+    score2=board[1][1], user3=board[2][0], score3=board[2][1], user4=board[3][0], score4=board[3][1],
+    user5=board[4][0], score5=board[4][1])
 
 
 # logout func

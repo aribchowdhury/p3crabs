@@ -93,7 +93,8 @@ def checkLogin(username: str, password: str) -> tuple:
 # returns the unique user_id so that it can be added to the session in app.py
 def registerUser(username: str, password: str):
     command = 'INSERT INTO users VALUES ("{}", "{}", NULL);'.format(username, password)
-
+    c.execute(command)
+    command = 'INSERT INTO leaderboard VALUES ("{}", 0, 1, 0);'.format(username)
     c.execute(command)
     db.commit()
 
@@ -101,14 +102,17 @@ def updateLeaderboardDB(username, correct, incorrect): #Function to update leade
     command = 'UPDATE leaderboard SET correct = correct + {}, incorrect = incorrect + {} WHERE username = "{}";'.format(
         correct, incorrect, username)
     c.execute(command)
-    command = 'UPDATE leaderboard SET score = CAST((correct/incorrect)*10000 AS INT) WHERE username = "{}";'.format(
-        correct, incorrect, username)
+    command = 'UPDATE leaderboard SET score = 10000*correct/incorrect WHERE username = "{}";'.format(username)
     c.execute(command)
     db.commit()
+    print("It has been committed")
 
 def top5(): #Function to return top 5 people in leaderboard along with scores
     c.execute('SELECT * FROM leaderboard ORDER BY score DESC LIMIT 5')
-    for row in c.fetchall(): yield [row[0],row[3]]
+    output = []
+    for row in c.fetchall(): output.append([row[0],row[3]])
+    output += [["",""] for _ in range(5-len(output))]
+    return output
 
 
 # closes the database (only use if user logging out i think)
