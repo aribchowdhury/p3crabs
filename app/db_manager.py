@@ -97,6 +97,19 @@ def registerUser(username: str, password: str):
     c.execute(command)
     db.commit()
 
+def updateLeaderboardDB(username, correct, incorrect): #Function to update leaderboard DB after a game ends
+    command = 'UPDATE leaderboard SET correct = correct + {}, incorrect = incorrect + {} WHERE username = "{}";'.format(
+        correct, incorrect, username)
+    c.execute(command)
+    command = 'UPDATE leaderboard SET score = CAST((correct/incorrect)*10000 AS INT) WHERE username = "{}";'.format(
+        correct, incorrect, username)
+    c.execute(command)
+    db.commit()
+
+def top5(): #Function to return top 5 people in leaderboard along with scores
+    c.execute('SELECT * FROM leaderboard ORDER BY score DESC LIMIT 5')
+    for row in c.fetchall(): yield [row[0],row[3]]
+
 
 # closes the database (only use if user logging out i think)
 def close():

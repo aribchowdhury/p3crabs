@@ -75,9 +75,11 @@ class PlayerCPU:
         if yourAnswer.strip() == self.answer:
             print("You have gotten the answer correct!")
             self.damageResult(self.boss)
+            return True
         else:
             print("You have gotten the answer incorrect")
             self.damageResult(self.player)
+            return False
 
 
     def damageResult(self, damageTo):  # Apply damage to player/boss
@@ -104,7 +106,7 @@ class PlayerCPU:
 
 
     def healthCheck(self):  # Check health of player and boss
-        return self.player["health"], self.boss["health"]
+        return str(self.player["health"] // 10)+"%", str(self.boss["health"] // 10)+"%"
 
 
     def getSprites(self): # Get player sprite and boss sprite

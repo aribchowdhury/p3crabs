@@ -12,7 +12,7 @@ from os import urandom
 app = Flask(__name__)
 app.secret_key = urandom(32)  # random 32 bit key
 socketio = SocketIO(app)
-game = None
+game, correct, incorrect = None, 0, 0
 createTables()
 
 
@@ -28,21 +28,36 @@ def cpu():
     global game
     game = PlayerCPU()
     playerSprite, bossSprite = game.getSprites()
+    playerHealth, bossHealth = game.healthCheck()
     return render_template(
         "cpu.html",
         playerSprite=playerSprite,
         bossSprite=bossSprite,
         question=game.trivia[-1][0],
         choices=game.trivia[-1][2],
-        health=game.healthCheck(),
+        playerHealth = playerHealth,
+        bossHealth = bossHealth
     )
 
 
 @app.route("/checkAnswer")
 def checkAnswer():
-    global game
-    game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
+    global game, correct, incorrect
+    check = game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
+    correct += check
+    incorrect += not(check)
     playerSprite, bossSprite = game.getSprites()
+    playerHealth, bossHealth = game.healthCheck()
+    if playerHealth == 0:
+        updateLeaderboardDB(session["username"],correct, incorrect)
+        correct = 0
+        incorrect = 0
+        return render_template("gameover.html")
+    if bossHealth == 0:
+        updateLeaderboardDB(session["username"], correct, incorrect)
+        correct = 0
+        incorrect = 0
+        return render_template("victory.html")
     game.newQuestion()
     return render_template(
         "cpu.html",
@@ -50,7 +65,8 @@ def checkAnswer():
         bossSprite=bossSprite,
         question=game.trivia[-1][0],
         choices=game.trivia[-1][2],
-        health=game.healthCheck(),
+        playerHealth = playerHealth,
+        bossHealth = bossHealth
     )
 
 

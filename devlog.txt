@@ -41,3 +41,7 @@ Set trivia DB question type to multiple choice
 carlosH -- 2021-04-26 18:51
 Combined the website to be runnable 
 And fixed character encoding on trivia
+
+aribC -- 2021-04-27 22:26
+Added top5() method in dbmanager.py to grab top 5 scoring users
+Added updateLeaderboardDB() method in dbmanager.py to update leaderboard db after a player vs cpu game ends
