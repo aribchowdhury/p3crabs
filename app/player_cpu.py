@@ -104,7 +104,7 @@ class PlayerCPU:
 
 
     def healthCheck(self):  # Check health of player and boss
-        return self.player["health"], self.boss["health"]
+        return self.player["health"] / 1000, self.boss["health"] / 1000
 
 
     def getSprites(self): # Get player sprite and boss sprite

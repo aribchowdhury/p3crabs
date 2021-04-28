@@ -3,9 +3,8 @@
 # P3: ArRESTed Development, JuSt in Time
 # 2021-04-23
 from requests import get
-from random import randint, shuffle
-from .marvel import getChars
-
+from random import randint
+import marvel
 
 class PlayerVsPlayer:
     # level corresponds to the number of questions overall
@@ -16,7 +15,7 @@ class PlayerVsPlayer:
         self.trivia = self.generateTrivia(level)
         self.img = None
         self.answer = None
-        self.choices = None
+        self.answer_len = None
 
     def generateEntities(self, hitsRequired):  # Create player and opponent objects
         player = get("https://pokeapi.co/api/v2/pokemon/" + str(randint(1, 898))).json()
@@ -33,32 +32,24 @@ class PlayerVsPlayer:
         return player, opponent
 
     def generateTrivia(self, questions):
-        trivia = getChars()
-        return trivia[:questions]
+        trivia = marvel.getChars()
+        ## get all characters of the name + some
+        print("Trivia Generated")
+        return trivia[: questions * 2 - 1]
 
     def newQuestion(self):  ##Need a way of fixing unicode characters
-        questionTuple = self.trivia.pop()
-        self.answer = questionTuple[0]
-        self.img = questionTuple[1]
-        wordLength = len(self.answer)
-
-        # self.question = question
-        # self.answer = answer
-        # self.choices = choices + [answer]
-        # shuffle(self.choices)
-        # print(
-        #     "Question Successfully Generated!\n",
-        #     question,
-        #     "\nThe correct answer is",
-        #     answer,
-        # )
-        # print("Possible Choices:", str(self.choices))
-        # return question, answer, self.choices
+        answer, img, answer_len = self.trivia.pop()
+        self.answer = answer
+        self.img = img
+        self.answer_len = answer_len
+        # print("Question Successfully Generated!\n" + str(answer_len) + "\nThe len of the answer is",answer,)
+        # print("Possible Choices:", str(self.answer_len))
+        return answer, img, answer_len
 
     def checkAnswer(
         self, yourAnswer
     ):  # Check answer to see if it is correct then apply damage accordingly
-        if yourAnswer.strip().upper() == self.answer:
+        if yourAnswer.strip() == self.answer:
             print("You have gotten the answer correct!")
             self.damageResult(self.opponent)
         else:
