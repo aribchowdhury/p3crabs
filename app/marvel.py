@@ -1,7 +1,6 @@
 import hashlib
 from random import randint, shuffle
 import time
-
 import requests
 
 
@@ -30,8 +29,11 @@ def getChars() -> list:
         path = i["thumbnail"]["path"]
         extension = i["thumbnail"]["extension"]
         if "not" not in path and extension != "gif":
+            name = i["name"]
+            name = name[:name.find("(")].strip()
             url = path + "." + extension
-            useful.append((i["name"], url))
+            length = len(name)
+            useful.append((name, url, length))
 
     shuffle(useful)
     return useful
@@ -39,6 +41,8 @@ def getChars() -> list:
 
 if __name__ == "__main__":
     print(getChars())
+
+
 # print(useful[:10])
 # print(len(useful))
 # characters = body['name']
