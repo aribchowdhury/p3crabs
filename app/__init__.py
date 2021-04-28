@@ -30,21 +30,24 @@ def cpu():
     game = PlayerCPU()
     playerSprite, bossSprite = game.getSprites()
     playerHealth, bossHealth = game.healthCheck()
+    game.newQuestion()
     return render_template(
-        "cpu.html",
-        playerSprite=playerSprite,
-        bossSprite=bossSprite,
+        "battle.html",
+        name1=session["username"],
+        sprite1=playerSprite,
+        sprite2=bossSprite,
+        hp1=playerHealth,
+        hp2=bossHealth,
         question=game.trivia[-1][0],
         choices=game.trivia[-1][2],
-        playerHealth = playerHealth,
-        bossHealth = bossHealth
     )
 
 
-@app.route("/CPUcheckAnswer")
+@app.route("/CPUcheckAnswer", methods=['POST'])
 def checkAnswer():
     global game, correct, incorrect
-    check = game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
+    choice = int(request.form["answer"])
+    check = game.checkAnswer(game.choices[choice])  # 1-4
     correct += check
     incorrect += not(check)
     playerSprite, bossSprite = game.getSprites()
@@ -61,13 +64,14 @@ def checkAnswer():
         return render_template("victory.html")
     game.newQuestion()
     return render_template(
-        "cpu.html",
-        playerSprite=playerSprite,
-        bossSprite=bossSprite,
+        "battle.html",
+        name1=session["username"],
+        sprite1=playerSprite,
+        sprite2=bossSprite,
+        hp1=playerHealth,
+        hp2=bossHealth,
         question=game.trivia[-1][0],
         choices=game.trivia[-1][2],
-        playerHealth = playerHealth,
-        bossHealth = bossHealth
     )
 
 
@@ -85,7 +89,7 @@ def login():
 
     # we will pass issue as an argument
     # vague error
-    return render_template("error.html", error=issue)  # dpdt on error.html
+    return render_template("login.html", err="is-invalid", errmsg=issue)  # dpdt on error.html
 
 
 # register func
@@ -93,6 +97,9 @@ def login():
 def register():
     return render_template("register.html")  # dpdt on register.html
 
+@app.route("/battle")  # this route should be callable on login.html
+def battle():
+    return render_template("battle.html")  # dpdt on register.html
 
 # take you to home page after creating account
 @app.route("/registerRead", methods=["POST"])
@@ -103,7 +110,7 @@ def registerRedirect():
     for _id in getAllUsers():
         users.append(getUsername(_id))
     if tempUser in users:
-        return render_template("error.html", error="Username already exists")
+        return render_template("register.html", err="is-invalid", errmsg="Username already exists")
     tempPass = request.form["password"]
     registerUser(tempUser, tempPass)
     return redirect("/")  # dpdt on home.html
@@ -154,6 +161,9 @@ def pvp_check_answer():
 # @app.route("/home")
 # def home():
 #     return render_template("test.html", **annoucment)
+@app.route("/home")
+def home():
+    return render_template("home.html")
 
 
 # logout func

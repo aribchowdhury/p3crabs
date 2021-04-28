@@ -4,7 +4,8 @@
 # 2021-04-23
 from requests import get
 from random import randint
-import marvel
+from .marvel import *
+# import marvel
 
 class PlayerVsPlayer:
     # level corresponds to the number of questions overall

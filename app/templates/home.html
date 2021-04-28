@@ -1,0 +1,81 @@
+<!-- Team crabs (Arib Chowdhury, Anya Zorin, Karl Hernandez, Saqif Abedin) -->
+<!-- SoftDev -->
+<!-- P3 -- ArRESTed Development, JuSt in Time  -->
+<!-- 2021-04-26 -->
+<!-- Free Background Image From https://wall.alphacoders.com/big.php?i=420248 -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Home</title>
+  </head>
+  <body style="background: url('static/bg1.png'); background-size: cover; background-position: bottom right; background-repeat: no-repeat; background-color: rgba(127,172,113,255)">
+    <form action="/logout">
+        <div class="form-group text-right">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </div>
+    </form>
+    <h2 class="text-center">Leaderboard</h2>
+    <div class="card" style="width:50%; margin: auto;">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>{{user1}}</td>
+                <td>{{score1}}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr >
+                <th scope="row">2</th>
+                <td>{{user2}}</td>
+                <td>{{score2}}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <th scope="row">3</th>
+                <td>{{user3}}</td>
+                <td>{{score3}}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <th scope="row">4</th>
+                <td>{{user4}}</td>
+                <td>{{score4}}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <th scope="row">5</th>
+                <td>{{user5}}</td>
+                <td>{{score5}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</br>
+<form action="/cpu">
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-warning btn-lg">Single Player</button>
+    </div>
+</form>
+</br>
+<form action="/pvp">
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-danger btn-lg">Player v.s. Player</button>
+    </div>
+</form>
+</body>
+</html>
