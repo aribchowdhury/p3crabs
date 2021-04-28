@@ -47,6 +47,9 @@ Added top5() method in dbmanager.py to grab top 5 scoring users
 Added updateLeaderboardDB() method in dbmanager.py to update leaderboard db after a player vs cpu game ends
 Fixed health reducing bug where it can drop below 0
 
+saqifA -- 2021-04-28 18:45
+Added win.html, lose.html, and error.html
+
 carlosH -- 2021-04-28 18:58
 Merged basic_app into master
 Fix a couple of errors - more to come
