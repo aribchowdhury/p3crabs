@@ -37,6 +37,9 @@ def login():
 def register():
     return render_template("register.html")  # dpdt on register.html
 
+@app.route("/battle")  # this route should be callable on login.html
+def battle():
+    return render_template("battle.html")  # dpdt on register.html
 
 # take you to home page after creating account
 @app.route("/registerRead", methods=["POST"])
