@@ -47,9 +47,9 @@ class PlayerCPU:
                 category = randint(9, 32)
             elif category in openTriviaCategories:
                 category = openTriviaCategories.index(category)
-            print(
-                "Questions for category", openTriviaCategories[category], "generated!"
-            )
+            # print(
+            #     "Questions for category", openTriviaCategories[category], "generated!"
+            # )
             if 9 <= category <= 32:
                 rawTrivia = get("https://opentdb.com/api.php?amount="+str(questionsPerCategory)+"&category="+str(category)+"&type=multiple").json()
                 for question in rawTrivia["results"]:
@@ -64,8 +64,8 @@ class PlayerCPU:
         self.question = question
         self.answer = answer
         self.choices = choices
-        print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
-        print("Possible Choices:", str(self.choices))
+        # print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
+        # print("Possible Choices:", str(self.choices))
         return question, answer, self.choices
 
 
@@ -104,7 +104,10 @@ class PlayerCPU:
 
 
     def healthCheck(self):  # Check health of player and boss
-        return self.player["health"] / 1000, self.boss["health"] / 1000
+        return (
+            str(self.player["health"] // 10) + "%",
+            str(self.boss["health"] // 10) + "%",
+        )
 
 
     def getSprites(self): # Get player sprite and boss sprite

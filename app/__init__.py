@@ -7,6 +7,7 @@ from flask_socketio import SocketIO, emit
 from requests import get
 from .db_manager import *
 from .player_cpu import PlayerCPU
+from .pvp import PlayerVsPlayer
 from os import urandom
 
 app = Flask(__name__)
@@ -38,7 +39,7 @@ def cpu():
     )
 
 
-@app.route("/checkAnswer")
+@app.route("/CPUcheckAnswer")
 def checkAnswer():
     global game
     game.checkAnswer(game.choices[request.form["answer"]])  # 1-4
@@ -92,18 +93,51 @@ def registerRedirect():
     return redirect("/")  # dpdt on home.html
 
 
-annoucment = {"text": "Hello"}
+@app.route("/pvp")
+def pvp():
+    global pvp_game
+    pvp_game = PlayerVsPlayer()
+    playerSprite, bossSprite = pvp_game.getSprites()
+    return render_template(
+        "pvptest.html",
+        playerSprite=playerSprite,
+        bossSprite=bossSprite,
+        answer=pvp_game.trivia[-1][0],
+        super_img=pvp_game.trivia[-1][1],
+        answer_len=pvp_game.trivia[-1][2],
+        health=pvp_game.healthCheck(),
+    )
 
 
-@socketio.on("Label value changed")
-def value_changed(message):
-    annoucment[message["who"]] = message["data"]
-    emit("update value", message, broadcast=True)
+@app.route("/PVPcheckAnswer")
+def pvp_check_answer():
+    global pvp_game
+    pvp_game.checkAnswer(request.form["answer"])
+    playerSprite, bossSprite = pvp_game.getSprites()
+    pvp_game.newQuestion()
+    return render_template(
+        "pvptest.html",
+        playerSprite=playerSprite,
+        bossSprite=bossSprite,
+        question=pvp_game.trivia[-1][0],
+        super_img=pvp_game.trivia[-1][1],
+        answer_len=pvp_game.trivia[-1][2],
+        health=pvp_game.healthCheck(),
+    )
 
 
-@app.route("/home")
-def home():
-    return render_template("test.html", **annoucment)
+# annoucment = {"text": "Hello"}
+
+
+# @socketio.on("Label value changed")
+# def value_changed(message):
+#     annoucment[message["who"]] = message["data"]
+#     emit("update value", message, broadcast=True)
+
+
+# @app.route("/home")
+# def home():
+#     return render_template("test.html", **annoucment)
 
 
 # logout func
