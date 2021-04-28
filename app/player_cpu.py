@@ -75,9 +75,11 @@ class PlayerCPU:
         if yourAnswer.strip() == self.answer:
             print("You have gotten the answer correct!")
             self.damageResult(self.boss)
+            return True
         else:
             print("You have gotten the answer incorrect")
             self.damageResult(self.player)
+            return False
 
 
     def damageResult(self, damageTo):  # Apply damage to player/boss
@@ -87,20 +89,22 @@ class PlayerCPU:
                 damage = randint(900, 1100) / (self.bossLevel // 2)
                 self.player["health"] -= damage
                 print("Player has taken",damage,"damage and has",self.player["health"],"health remaining")
-            else:
+            elif attLeft == 1:
                 print("Player has taken", self.player["health"], "damage")
                 self.player["health"] = 0
                 print("Player has died")
+            self.boss["attacks"] -= 1
         elif damageTo == self.boss:
             attLeft = self.player["attacks"]
             if attLeft != 1:
                 damage = randint(900, 1100) / self.bossLevel
                 self.boss["health"] -= damage
                 print("Boss has taken", damage,"damage and has",self.boss["health"],"health remaining")
-            else:
+            elif attLeft == 1:
                 print("Boss has taken", self.boss["health"], "damage")
                 self.boss["health"] = 0
                 print("Boss has died")
+            self.player["attacks"] -= 1
 
 
     def healthCheck(self):  # Check health of player and boss
