@@ -52,16 +52,16 @@ def checkAnswer():
     incorrect += not(check)
     playerSprite, bossSprite = game.getSprites()
     playerHealth, bossHealth = game.healthCheck()
-    if playerHealth == 0:
+    if float(playerHealth[:-1]) <= 0:
         updateLeaderboardDB(session["username"],correct, incorrect)
         correct = 0
         incorrect = 0
-        return render_template("gameover.html")
-    if bossHealth == 0:
+        return render_template("lose.html")
+    if float(bossHealth[:-1]) <= 0:
         updateLeaderboardDB(session["username"], correct, incorrect)
         correct = 0
         incorrect = 0
-        return render_template("victory.html")
+        return render_template("win.html")
     game.newQuestion()
     return render_template(
         "battle.html",
