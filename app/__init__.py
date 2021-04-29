@@ -13,7 +13,8 @@ from os import urandom
 app = Flask(__name__)
 app.secret_key = urandom(32)  # random 32 bit key
 socketio = SocketIO(app)
-game, correct, incorrect, data = None, 0, 0, {}
+game, correct, incorrect = None, 0, 0
+data = {}
 createTables()
 
 
@@ -32,6 +33,7 @@ def cpu():
     playerHealth, bossHealth = game.healthCheck()
     game.newQuestion()
     print(game.answer)
+    print(game.choices)
     return render_template(
         "battle.html",
         name1=session["username"],
@@ -39,8 +41,8 @@ def cpu():
         sprite2=bossSprite,
         hp1=playerHealth,
         hp2=bossHealth,
-        question=game.trivia[-1][0],
-        choices=game.trivia[-1][2],
+        question=game.question,
+        choices=game.choices,
     )
 
 
@@ -48,7 +50,6 @@ def cpu():
 def checkAnswer():
     global game, correct, incorrect
     choice = int(request.form["answer"])
-    print(game.answer)
     check = game.checkAnswer(game.choices[choice])  # 1-4
     correct += check
     incorrect += not (check)
@@ -65,6 +66,8 @@ def checkAnswer():
         incorrect = 0
         return render_template("win.html")
     game.newQuestion()
+    print(game.answer)
+    print(game.choices)
     return render_template(
         "battle.html",
         name1=session["username"],
@@ -72,8 +75,8 @@ def checkAnswer():
         sprite2=bossSprite,
         hp1=playerHealth,
         hp2=bossHealth,
-        question=game.trivia[-1][0],
-        choices=game.trivia[-1][2],
+        question=game.question,
+        choices=game.choices,
     )
 
 
@@ -174,12 +177,13 @@ def pvp_check_answer():
 #     join_room(room)
 #     send(username + "has entered the room.", to=room)
 
-@socketio.on("health has changed")
-def value_changed(message):
-    global data
-    # pvp_game.checkAnswer(request.form["answer"])
-    data[message["who"]] = message["data"]
-    emit("update value", message, broadcast=True)
+
+# @socketio.on("health has changed")
+# def value_changed(message):
+#     global data
+#     # pvp_game.checkAnswer(request.form["answer"])
+#     data[message["who"]] = message["data"]
+#     emit("update value", message, broadcast=True)
 
 
 # @socketio.on('Slider value changed')
