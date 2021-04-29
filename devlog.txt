@@ -65,3 +65,6 @@ leaderboard up and running now
 saqifA -- 2021-04-28 17:25
 Fixed requirements.txt
 Ensured that launch codes work as expected
+
+anyaZ -- 2021-04-29 00:12
+Added flag to design doc and other updates
