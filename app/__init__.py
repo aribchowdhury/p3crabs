@@ -38,8 +38,8 @@ def cpu():
         sprite2=bossSprite,
         hp1=playerHealth,
         hp2=bossHealth,
-        question=game.trivia[-1][0],
-        choices=game.trivia[-1][2],
+        question=game.question,
+        choices=game.choices,
     )
 
 
@@ -70,8 +70,8 @@ def checkAnswer():
         sprite2=bossSprite,
         hp1=playerHealth,
         hp2=bossHealth,
-        question=game.trivia[-1][0],
-        choices=game.trivia[-1][2],
+        question=game.question,
+        choices=game.choices
     )
 
 
