@@ -64,8 +64,8 @@ class PlayerCPU:
         self.question = question
         self.answer = answer
         self.choices = choices
-        # print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
-        # print("Possible Choices:", str(self.choices))
+        print("Question Successfully Generated!\n",question,"\nThe correct answer is",answer,)
+        print("Possible Choices:", str(self.choices))
         return question, answer, self.choices
 
 
