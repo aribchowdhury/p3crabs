@@ -5,23 +5,141 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CPU</title>
-  </head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        // sending a connect request to the server.
+        let socket = io.connect("http://127.0.0.1:5000/");
 
-  <body>
-    <img src="{{ playerSprite }}" />
-    <img src="{{ bossSprite }}" />
-    <p>{{ question }}</p>
-    <ul>
-    {% for i in choices %}
-    <li>
-    {{ i }}
-    </li>
-    {% endfor %}
-    </ul>
-    <p>Player health: {{health[0]}}</p>
-    <p>Boss health: {{health[1]}}</p>
+        // An event handler for a change of value
+        // for some reason arrow functions don't work here
+        $("input.sync").on("input", function (event) {
+          socket.emit("health has changed", {
+            who: $(this).attr("id"),
+            data: $(this).val(),
+          });
+          return false;
+        });
+
+        socket.on("update value", (msg) => {
+          $("#change").text(msg.data);
+        });
+      });
+    </script>
+    <style>
+      #yellow {
+        width: 80%;
+        min-height: 10vh;
+        color: white;
+        background-color: rgb(226, 173, 26);
+        border-color: rgb(226, 173, 26);
+      }
+      #yellow:hover {
+        background-color: rgb(196, 150, 26);
+        border-color: rgb(196, 150, 26);
+      }
+    </style>
+    <title>Battle</title>
+  </head>
+  <body
+    class="text-center"
+    style="
+      background: url('static/bg2.png');
+      background-size: cover;
+      background-position: bottom right;
+      background-repeat: no-repeat;
+      background-color: rgba(127, 172, 113, 255);
+    "
+  >
+    <br />
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <br />
+          <br />
+          <br />
+          <br /><br />
+          <br />
+          <br />
+          <br />
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title text-left">
+                <h6>Player 1</h6>
+              </div>
+              <div class="progress">
+                <div
+                  class="progress-bar bg-success sync"
+                  role="progressbar"
+                  style="width: {{ PlayerHealth }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <img src="{{ sprite1 }}" style="height: 50vh" />
+        </div>
+        <div class="col-8">
+          <div class="card" style="width: 50%; margin-left: auto">
+            <div class="card-body">
+              <div class="card-title text-left">
+                <h6>Player 2</h6>
+              </div>
+              <div class="progress">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: {{ OpponetHealth }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <img src="{{ sprite2 }}" style="height: 45vh" />
+          </div>
+
+          <div>
+            <img src="{{ super_img }}" alt="Superhero" />
+            <div class="card text-center border-dark" stye="border: 5px black;">
+              The length of the superhero name is (including spaces):
+              {{ answer_len }}
+            </div>
+          </div>
+          <br />
+          <form action="/PVPcheckAnswer" method="POST">
+            <div class="container">
+              <div class="row">
+                <input type="text" name="testing" id="text" class="sync" />
+                <br />
+                <!-- {{answer }}-->
+                <label for="testing" id="change"
+                  >Check your answer: {{ text }}</label
+                >
+              </div>
+              <br />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

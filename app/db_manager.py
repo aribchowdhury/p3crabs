@@ -3,7 +3,9 @@
 # P3: ArRESTed Development, JuSt in Time
 # 2021-04-23
 import sqlite3
-
+import hashlib
+# from os import urandom
+# salt = urandom(32)
 # for testing only
 # import os
 # os.remove("../blogdata.db")
@@ -22,7 +24,7 @@ def createTables():
     # password (str)
     # unique id (int primary key)
 
-    command = "CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);"
+    command = "CREATE TABLE IF NOT EXISTS users(username TEXT, password BLOB, id INTEGER PRIMARY KEY AUTOINCREMENT);"
     command += "CREATE TABLE IF NOT EXISTS leaderboard(username TEXT, correct INT, incorrect INT, score INT);"
 
     # executes the command and commits the change
@@ -35,9 +37,9 @@ def createTables():
 # consider case when 2 users have the same username and password. Technically
 # would work because they have different ids. Should we make username unique as well?
 def getUserId(username: str) -> int:
-    command = 'SELECT id FROM users WHERE username = "{}";'.format(username)
+    c.execute("SELECT id FROM users WHERE username = ?", (username,))
     info = 0
-    for row in c.execute(command):
+    for row in c.fetchall():
         info = row[0]
 
     return info
@@ -45,10 +47,11 @@ def getUserId(username: str) -> int:
 
 # returns a username for any given user_id
 def getUsername(user_id: int) -> str:
-    command = 'SELECT username FROM users WHERE id = "{}";'.format(user_id)
+    c.execute("SELECT username FROM users WHERE id = ?", (str(user_id),))
     user = ""
-    for row in c.execute(command):
+    for row in c.fetchall():
         user = row[0]
+
     return user
 
 
@@ -64,11 +67,11 @@ def getAllUsers():
 # returns (username, password, user_id) for a given username. Returns None
 # if argument username is not present in the database
 def getUserInfo(username: str):
-    command = 'SELECT username, password, id FROM users WHERE username = "{}";'.format(
-        username
+    c.execute(
+        "SELECT username, password, id FROM users WHERE username = ?", (username,)
     )
     info = ()
-    for row in c.execute(command):
+    for row in c.fetchall():
         info += (row[0], row[1], row[2])
     if info == ():
         return None
@@ -84,7 +87,9 @@ def checkLogin(username: str, password: str) -> tuple:
     info = getUserInfo(username)
     if info == None:
         return (False, "User not found", None)
-    elif (info[0] == username) and (info[1] == password):
+    elif (info[0] == username) and (
+        info[1] == hashlib.sha256(password.encode()).hexdigest()
+    ):
         return (True, None, info[2])
     return (False, "Incorrect username or password", None)
 
@@ -92,52 +97,36 @@ def checkLogin(username: str, password: str) -> tuple:
 # registers a new user by adding their info to the db
 # returns the unique user_id so that it can be added to the session in app.py
 def registerUser(username: str, password: str):
-    command = 'INSERT INTO users VALUES ("{}", "{}", NULL);'.format(username, password)
-    c.execute(command)
-    command = 'INSERT INTO leaderboard VALUES ("{}", 0, 1, 0);'.format(username)
-    c.execute(command)
+    hash = hashlib.sha256(password.encode()).hexdigest()
+    c.execute("INSERT INTO users VALUES (?, ?, NULL)", (username, hash))
+    c.execute("INSERT INTO leaderboard VALUES (?, 0, 1, 0)", (username,))
     db.commit()
 
-def updateLeaderboardDB(username, correct, incorrect): #Function to update leaderboard DB after a game ends
-    command = 'UPDATE leaderboard SET correct = correct + {}, incorrect = incorrect + {} WHERE username = "{}";'.format(
-        correct, incorrect, username)
-    c.execute(command)
-    command = 'UPDATE leaderboard SET score = 10000*correct/incorrect WHERE username = "{}";'.format(username)
-    c.execute(command)
+
+def updateLeaderboardDB(
+    username, correct, incorrect
+):  # Function to update leaderboard DB after a game ends
+    c.execute(
+        "UPDATE leaderboard SET correct = correct + ?, incorrect = incorrect + ? WHERE username = ?",
+        (correct, incorrect, username),
+    )
+    c.execute(
+        "UPDATE leaderboard SET score = 10000*correct/incorrect WHERE username = ?",
+        (username,),
+    )
     db.commit()
     print("It has been committed")
 
-def top5(): #Function to return top 5 people in leaderboard along with scores
-    c.execute('SELECT * FROM leaderboard ORDER BY score DESC LIMIT 5')
+
+def top5():  # Function to return top 5 people in leaderboard along with scores
+    c.execute("SELECT * FROM leaderboard ORDER BY score DESC LIMIT 5")
     output = []
-    for row in c.fetchall(): output.append([row[0],row[3]])
-    output += [["",""] for _ in range(5-len(output))]
+    for row in c.fetchall():
+        output.append([row[0], row[3]])
+    output += [["", ""] for _ in range(5 - len(output))]
     return output
 
 
 # closes the database (only use if user logging out i think)
 def close():
     db.close()
-
-
-# For testing only
-# if __name__ == "__main__":
-#     createTables()
-
-#     print(getUserId("ben"))
-#     # createBlog(getUserId("ben"), "ben", "Doodoo",
-#     #            "10/12/2020", "This is my blog.")
-
-#     command = 'SELECT * FROM blogs'
-#     for row in c.execute(command):
-#         print(row)
-
-#     print(checkLogin("benn", "dover"))
-
-#     blogs = getUserBlogs(getUserId("ben"))
-
-#     for blog in blogs:
-#         title, bio, date = getBlogBasic(blog)
-#         print(title)
-#         print(bio)
-#         print(date)

@@ -42,6 +42,10 @@ carlosH -- 2021-04-26 18:51
 Combined the website to be runnable 
 And fixed character encoding on trivia
 
+anyaZ -- 2021-04-26 20:26
+Pushed login.html, register.html, and created error msgs 
+Made page for player v computer 
+
 aribC -- 2021-04-27 22:26
 Added top5() method in dbmanager.py to grab top 5 scoring users
 Added updateLeaderboardDB() method in dbmanager.py to update leaderboard db after a player vs cpu game ends
@@ -57,3 +61,10 @@ Started to realized that we did work, but there is more :(
 
 aribC -- 2021-04-28 19:41
 leaderboard up and running now
+
+saqifA -- 2021-04-28 17:25
+Fixed requirements.txt
+Ensured that launch codes work as expected
+
+anyaZ -- 2021-04-29 00:12
+Added flag to design doc and other updates
