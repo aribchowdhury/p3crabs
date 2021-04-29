@@ -57,3 +57,7 @@ Started to realized that we did work, but there is more :(
 
 aribC -- 2021-04-28 19:41
 leaderboard up and running now
+
+saqifA -- 2021-04-28 17:25
+Fixed requirements.txt
+Ensured that launch codes work as expected
